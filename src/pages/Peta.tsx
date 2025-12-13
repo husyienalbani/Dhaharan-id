@@ -1,32 +1,57 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Map as MapIcon, MapPin, Calendar, Camera, X, ExternalLink } from "lucide-react";
+import { MapPin, Calendar, Camera, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 
-// Mock data for activity locations
+import "leaflet/dist/leaflet.css";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import MarkerClusterGroup from "@changey/react-leaflet-markercluster";
+import L from "leaflet";
+
+// LEAFLET ICON FIX
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+});
+
+// Dummy data
 const activityLocations = [
   {
     id: 1,
     title: "Bagi-bagi Takjil Ramadhan",
-    description: "Kegiatan pembagian takjil untuk masyarakat di area masjid. Lebih dari 500 takjil berhasil dibagikan.",
+    description:
+      "Kegiatan pembagian takjil kepada masyarakat sekitar menjelang waktu berbuka puasa.",
     date: "15 Maret 2024",
     location: "Masjid Al-Ikhlas, Jakarta Selatan",
     coordinates: { lat: -6.2615, lng: 106.8106 },
     images: [
       "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=600",
       "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600",
+      "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600",
     ],
     category: "Ramadhan",
   },
   {
     id: 2,
     title: "Santunan Anak Yatim",
-    description: "Program pemberian santunan dan perlengkapan sekolah untuk 50 anak yatim.",
+    description:
+      "Program pemberian santunan dan paket kebutuhan kepada anak-anak yatim.",
     date: "20 Februari 2024",
-    location: "Panti Asuhan Harapan, Depok",
+    location: "Depok",
     coordinates: { lat: -6.4025, lng: 106.7942 },
     images: [
       "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600",
@@ -35,197 +60,177 @@ const activityLocations = [
   },
   {
     id: 3,
-    title: "Bakti Sosial Desa Binaan",
-    description: "Kegiatan bakti sosial meliputi pembagian sembako dan pengobatan gratis untuk 200 warga.",
-    date: "10 Januari 2024",
-    location: "Desa Sukamaju, Bogor",
-    coordinates: { lat: -6.5971, lng: 106.8060 },
+    title: "Bersih-Bersih Lingkungan",
+    description:
+      "Kegiatan gotong royong membersihkan lingkungan RW dan area taman bermain.",
+    date: "5 Januari 2024",
+    location: "Tangerang Selatan",
+    coordinates: { lat: -6.2907, lng: 106.7227 },
     images: [
+      "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=600",
       "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600",
-      "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600",
+      "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600",
     ],
-    category: "Baksos",
+    category: "Sosial",
   },
   {
     id: 4,
-    title: "Donor Darah Massal",
-    description: "Kegiatan donor darah bekerjasama dengan PMI. Berhasil mengumpulkan 100 kantong darah.",
-    date: "5 Desember 2023",
-    location: "Gedung Serbaguna, Jakarta Pusat",
-    coordinates: { lat: -6.1865, lng: 106.8341 },
+    title: "Pelatihan Literasi Digital",
+    description:
+      "Pengenalan keamanan digital dan penggunaan teknologi kepada warga.",
+    date: "10 April 2024",
+    location: "Kantor Kelurahan Cilandak",
+    coordinates: { lat: -6.2897, lng: 106.7997 },
     images: [
-      "https://images.unsplash.com/photo-1615461066841-6116e61058f4?w=600",
+      "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=600",
+      "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600",
+      "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600",
+    ],
+    category: "Pendidikan",
+  },
+  {
+    id: 5,
+    title: "Pemeriksaan Kesehatan Gratis",
+    description:
+      "Pemeriksaan kesehatan meliputi tensi darah, gula darah, dan konsultasi dokter.",
+    date: "28 Mei 2024",
+    location: "Puskesmas Kemang",
+    coordinates: { lat: -6.2576, lng: 106.8201 },
+    images: [
+      "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=600",
+      "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600",
+      "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600",
     ],
     category: "Kesehatan",
   },
   {
-    id: 5,
-    title: "Bersih-Bersih Sungai",
-    description: "Kegiatan gotong royong membersihkan sungai dan bantaran bersama 60 relawan.",
-    date: "15 November 2023",
-    location: "Kampung Melayu, Jakarta Timur",
-    coordinates: { lat: -6.2258, lng: 106.8643 },
+    id: 6,
+    title: "Kelas Mengaji Anak",
+    description:
+      "Pembinaan dan edukasi membaca Al-Qur'an untuk anak-anak usia 6–12 tahun.",
+    date: "1 Mei 2024",
+    location: "TPA Darussalam, Bekasi",
+    coordinates: { lat: -6.2476, lng: 107.0031 },
     images: [
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600",
+      "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=600",
+      "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600",
+      "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600",
     ],
-    category: "Lingkungan",
+    category: "Keagamaan",
   },
 ];
 
+// FlyTo Component
+function FlyToLocation({ coords }: any) {
+  const map = useMap();
+  useEffect(() => {
+    if (coords) map.flyTo([coords.lat, coords.lng], 14, { duration: 1.2 });
+  }, [coords]);
+  return null;
+}
+
 export default function Peta() {
-  const [selectedLocation, setSelectedLocation] = useState<typeof activityLocations[0] | null>(null);
-  const [mapboxToken, setMapboxToken] = useState("");
-  const [showTokenInput, setShowTokenInput] = useState(true);
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<any>(null);
+  const [selectedLocation, setSelectedLocation] = useState<any>(null);
+  const [slideIndex, setSlideIndex] = useState(0);
 
-  const handleTokenSubmit = async () => {
-    if (mapboxToken.trim()) {
-      setShowTokenInput(false);
-      // Dynamically import mapbox
-      const mapboxgl = (await import("mapbox-gl")).default;
-      await import("mapbox-gl/dist/mapbox-gl.css");
-      
-      if (!mapContainer.current) return;
-      
-      mapboxgl.accessToken = mapboxToken;
-      
-      mapRef.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: "mapbox://styles/mapbox/light-v11",
-        center: [106.8456, -6.2088], // Jakarta
-        zoom: 10,
-      });
-
-      mapRef.current.addControl(new mapboxgl.NavigationControl(), "top-right");
-
-      // Add markers for each location
-      activityLocations.forEach((location) => {
-        const el = document.createElement("div");
-        el.className = "custom-marker";
-        el.style.cssText = `
-          width: 40px;
-          height: 40px;
-          background: hsl(51, 90%, 70%);
-          border: 3px solid hsl(220, 25%, 20%);
-          border-radius: 50% 50% 50% 0;
-          transform: rotate(-45deg);
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 3px 3px 0px hsl(220, 25%, 20%);
-        `;
-
-        const inner = document.createElement("div");
-        inner.style.cssText = `
-          width: 10px;
-          height: 10px;
-          background: hsl(220, 25%, 20%);
-          border-radius: 50%;
-          transform: rotate(45deg);
-        `;
-        el.appendChild(inner);
-
-        new mapboxgl.Marker(el)
-          .setLngLat([location.coordinates.lng, location.coordinates.lat])
-          .addTo(mapRef.current);
-
-        el.addEventListener("click", () => {
-          setSelectedLocation(location);
-          mapRef.current.flyTo({
-            center: [location.coordinates.lng, location.coordinates.lat],
-            zoom: 14,
-          });
-        });
-      });
-    }
-  };
+  // AUTOPLAY SLIDER
+  useEffect(() => {
+    if (!selectedLocation) return;
+    const total = selectedLocation.images.length;
+    const timer = setInterval(() => {
+      setSlideIndex((prev) => (prev + 1) % total);
+    }, 2800);
+    return () => clearInterval(timer);
+  }, [selectedLocation]);
 
   return (
     <div className="min-h-screen py-8">
       <div className="container mx-auto px-4">
-        {/* Header */}
+        {/* TITLE */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <Badge className="mb-4" variant="highlight">
-            <MapIcon className="w-4 h-4 mr-1" />
-            Lokasi Kegiatan
+          <Badge className="mb-4">
+            <MapPin className="w-4 h-4 mr-1" /> Lokasi Kegiatan
           </Badge>
+
           <h1 className="font-fredoka text-4xl md:text-5xl font-bold mb-4">
             Peta Kegiatan
           </h1>
+
           <p className="font-nunito text-muted-foreground max-w-2xl mx-auto">
-            Jelajahi lokasi-lokasi kegiatan yang telah dilaksanakan oleh komunitas 
-            Dhaharan di berbagai wilayah.
+            Jelajahi lokasi-lokasi kegiatan yang telah dilaksanakan.
           </p>
         </motion.div>
 
-        {/* Map Section */}
+        {/* GRID LAYOUT */}
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Map Container */}
+          {/* MAP */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
             className="lg:col-span-2"
           >
-            <Card className="overflow-hidden">
-              <CardContent className="p-0">
-                {showTokenInput ? (
-                  <div className="aspect-video flex flex-col items-center justify-center p-8 bg-secondary">
-                    <div className="w-16 h-16 mb-6 rounded-2xl bg-primary border-2 border-foreground shadow-cartoon flex items-center justify-center">
-                      <MapIcon className="w-8 h-8" />
-                    </div>
-                    <h3 className="font-fredoka text-xl font-semibold mb-2 text-center">
-                      Masukkan Mapbox Token
-                    </h3>
-                    <p className="font-nunito text-muted-foreground text-sm text-center mb-6 max-w-md">
-                      Untuk menampilkan peta, silakan masukkan token Mapbox Anda. 
-                      Dapatkan token gratis di{" "}
-                      <a 
-                        href="https://mapbox.com" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-highlight underline"
+            <Card className="overflow-hidden h-full">
+              <CardContent className="p-0 h-full min-h-[700px]">
+                <MapContainer
+                  center={[-6.2088, 106.8456]}
+                  zoom={10}
+                  scrollWheelZoom={true}
+                  className="w-full h-full"
+                  style={{ minHeight: "700px" }}
+                >
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution="© OpenStreetMap contributors"
+                  />
+
+                  {selectedLocation && (
+                    <FlyToLocation coords={selectedLocation.coordinates} />
+                  )}
+
+                  <MarkerClusterGroup chunkedLoading>
+                    {activityLocations.map((loc) => (
+                      <Marker
+                        key={loc.id}
+                        position={[loc.coordinates.lat, loc.coordinates.lng]}
+                        eventHandlers={{
+                          click: () => {
+                            setSelectedLocation(loc);
+                            setSlideIndex(0);
+                          },
+                        }}
                       >
-                        mapbox.com
-                      </a>
-                    </p>
-                    <div className="flex gap-2 w-full max-w-md">
-                      <Input
-                        placeholder="pk.xxxxx..."
-                        value={mapboxToken}
-                        onChange={(e) => setMapboxToken(e.target.value)}
-                        className="flex-1"
-                      />
-                      <Button onClick={handleTokenSubmit}>
-                        Tampilkan Peta
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div ref={mapContainer} className="aspect-video w-full" />
-                )}
+                        <Popup>
+                          <div className="font-semibold">{loc.title}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {loc.location}
+                          </div>
+                        </Popup>
+                      </Marker>
+                    ))}
+                  </MarkerClusterGroup>
+                </MapContainer>
               </CardContent>
             </Card>
           </motion.div>
 
-          {/* Location List / Detail */}
+          {/* RIGHT PANEL */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="space-y-4"
+            className="space-y-6"
           >
             {selectedLocation ? (
-              <Card>
-                <CardHeader className="pb-2">
+              <Card className="h-full">
+                <CardHeader className="pb-4">
                   <div className="flex items-start justify-between">
-                    <Badge variant="highlight">{selectedLocation.category}</Badge>
+                    <Badge variant="highlight">
+                      {selectedLocation.category}
+                    </Badge>
+
                     <Button
                       variant="ghost"
                       size="icon"
@@ -234,36 +239,65 @@ export default function Peta() {
                       <X className="w-4 h-4" />
                     </Button>
                   </div>
-                  <CardTitle className="mt-2">{selectedLocation.title}</CardTitle>
+
+                  <CardTitle className="mt-2">
+                    {selectedLocation.title}
+                  </CardTitle>
+
                   <CardDescription className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    {selectedLocation.date}
+                    <Calendar className="w-4 h-4" /> {selectedLocation.date}
                   </CardDescription>
                 </CardHeader>
+
                 <CardContent className="space-y-4">
+                  {/* DESCRIPTION */}
                   <p className="text-sm text-muted-foreground font-nunito">
                     {selectedLocation.description}
                   </p>
+
+                  {/* LOCATION */}
                   <div className="flex items-start gap-2 text-sm">
                     <MapPin className="w-4 h-4 mt-0.5 text-highlight" />
-                    <span className="font-nunito">{selectedLocation.location}</span>
+                    {selectedLocation.location}
                   </div>
-                  
-                  {/* Images */}
+
+                  {/* AUTOPLAY SLIDER */}
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm font-semibold">
-                      <Camera className="w-4 h-4" />
-                      Dokumentasi
+                      <Camera className="w-4 h-4" /> Dokumentasi
                     </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      {selectedLocation.images.map((img, idx) => (
-                        <img
-                          key={idx}
-                          src={img}
-                          alt={`${selectedLocation.title} ${idx + 1}`}
-                          className="w-full aspect-square object-cover rounded-lg border-2 border-foreground shadow-cartoon-sm"
-                        />
-                      ))}
+
+                    <div className="relative w-full overflow-hidden rounded-xl">
+                      <motion.div
+                        className="flex"
+                        animate={{ x: `-${slideIndex * 100}%` }}
+                        transition={{ duration: 0.6, ease: "easeInOut" }}
+                      >
+                        {selectedLocation.images.map(
+                          (img: string, i: number) => (
+                            <img
+                              key={i}
+                              src={img}
+                              className="w-full h-full object-contain rounded-xl"
+                            />
+                          )
+                        )}
+                      </motion.div>
+
+                      {/* Bullet Indicator */}
+                      <div className="flex justify-center gap-3 mt-3">
+                        {selectedLocation.images.map((_, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => setSlideIndex(idx)}
+                            className={`rounded-full transition-all ${
+                              slideIndex === idx
+                                ? "w-4 h-4 bg-orange-500"
+                                : "w-3 h-3 bg-gray-300"
+                            }`}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -273,44 +307,41 @@ export default function Peta() {
                 <h3 className="font-fredoka text-lg font-semibold">
                   Daftar Lokasi ({activityLocations.length})
                 </h3>
-                <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
-                  {activityLocations.map((location, index) => (
+
+                <div className="space-y-3 max-h-[640px] overflow-y-auto pr-2">
+                  {activityLocations.map((loc) => (
                     <motion.div
-                      key={location.id}
+                      key={loc.id}
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
                     >
                       <Card
                         className="cursor-pointer hover:bg-secondary/50 transition-colors"
                         onClick={() => {
-                          setSelectedLocation(location);
-                          if (mapRef.current) {
-                            mapRef.current.flyTo({
-                              center: [location.coordinates.lng, location.coordinates.lat],
-                              zoom: 14,
-                            });
-                          }
+                          setSelectedLocation(loc);
+                          setSlideIndex(0);
                         }}
                       >
                         <CardContent className="p-4">
                           <div className="flex items-start gap-3">
-                            <div className="w-10 h-10 shrink-0 rounded-xl bg-primary border-2 border-foreground shadow-cartoon-sm flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-xl bg-primary border border-foreground flex items-center justify-center">
                               <MapPin className="w-5 h-5" />
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-fredoka font-semibold text-sm line-clamp-1">
-                                {location.title}
+
+                            <div className="flex-1">
+                              <h4 className="font-fredoka font-semibold text-sm">
+                                {loc.title}
                               </h4>
-                              <p className="text-xs text-muted-foreground line-clamp-1">
-                                {location.location}
+                              <p className="text-xs text-muted-foreground">
+                                {loc.location}
                               </p>
+
                               <div className="flex items-center gap-2 mt-1">
                                 <Badge variant="outline" className="text-xs">
-                                  {location.category}
+                                  {loc.category}
                                 </Badge>
                                 <span className="text-xs text-muted-foreground">
-                                  {location.date}
+                                  {loc.date}
                                 </span>
                               </div>
                             </div>

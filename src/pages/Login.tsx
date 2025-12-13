@@ -50,7 +50,7 @@ export default function Login() {
       setIsLogin(true);
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
     } else {
-      navigate("/");
+      navigate("/dashboard");
     }
   };
 
@@ -68,9 +68,11 @@ export default function Login() {
         <Card className="shadow-cartoon-lg">
           <CardHeader className="text-center">
             <Link to="/" className="inline-flex justify-center mb-4">
-              <div className="w-14 h-14 rounded-2xl bg-primary border-2 border-foreground shadow-cartoon flex items-center justify-center font-fredoka font-bold text-2xl hover:animate-wiggle">
-                D
-              </div>
+            <img
+              src="src/assets/logo-dhaharan.png"
+              alt="Logo"
+              className="w-10 h-10 rounded-xl border-2 border-foreground shadow-cartoon-sm object-cover"
+            />
             </Link>
             <CardTitle className="text-2xl">
               {isLogin ? "Selamat Datang!" : "Bergabung Sekarang"}

@@ -7,11 +7,17 @@ import { Layout } from "@/components/Layout";
 import Index from "./pages/Index";
 import Kegiatan from "./pages/Kegiatan";
 import Cashflow from "./pages/Cashflow";
+import AddCashflow from "./pages/AddCashflow";
+import Activities from "./pages/Activities";
+import Setting from "./pages/Settings";
 import Peta from "./pages/Peta";
 import Login from "./pages/Login";
-import Admin from "./pages/Admin";
+import Admin from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
-
+import DonationSection from "./pages/DonationSection";
+import VolunteerSection from "./pages/VolunteerSection";
+import VolunteersView from "./pages/VolunteersView";
+import DonationsView from "./pages/DonationsView";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -26,11 +32,18 @@ const App = () => (
             <Route path="/kegiatan" element={<Kegiatan />} />
             <Route path="/cashflow" element={<Cashflow />} />
             <Route path="/peta" element={<Peta />} />
-            <Route path="/admin" element={<Admin />} />
           </Route>
+          <Route path="/dashboard" element={<Admin />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Login />} />
-          <Route path="*" element={<NotFound />} />
+           <Route path="/AddCashflow" element={<AddCashflow />} />
+            <Route path="/activities" element={<Activities />} />
+             <Route path="/settings" element={<Setting />} />
+             <Route path="/donationsection" element={<DonationSection />} />
+             <Route path="/volunteersection" element={<VolunteerSection />} />
+             <Route path="/volunteersview" element={<VolunteersView />} />
+            <Route path="/donationsview" element={<DonationsView />} />
+            <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

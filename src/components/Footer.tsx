@@ -9,9 +9,11 @@ export function Footer() {
           {/* Logo & Description */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-primary border-2 border-foreground shadow-cartoon-sm flex items-center justify-center font-fredoka font-bold text-lg">
-                D
-              </div>
+            <img
+              src="src/assets/logo-dhaharan.png"
+              alt="Logo"
+              className="w-10 h-10 rounded-xl border-2 border-foreground shadow-cartoon-sm object-cover"
+            />
               <span className="font-fredoka text-xl font-bold">dhaharan.id</span>
             </div>
             <p className="text-muted-foreground font-nunito text-sm leading-relaxed">
@@ -63,9 +65,6 @@ export function Footer() {
         <div className="border-t-2 border-foreground/20 mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground font-nunito text-sm">
             © 2024 dhaharan.id. All rights reserved.
-          </p>
-          <p className="flex items-center gap-1 text-muted-foreground font-nunito text-sm">
-            Made with <Heart className="w-4 h-4 text-highlight fill-current" /> by Komunitas Dhaharan
           </p>
         </div>
       </div>

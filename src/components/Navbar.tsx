@@ -16,14 +16,16 @@ export function Navbar() {
   const location = useLocation();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-sm border-b-2 border-foreground">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-sm border-b-2 border-foreground z-[1000]">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-xl bg-primary border-2 border-foreground shadow-cartoon-sm flex items-center justify-center font-fredoka font-bold text-lg group-hover:animate-wiggle">
-              D
-            </div>
+            <img
+              src="src/assets/logo-dhaharan.png"
+              alt="Logo"
+              className="w-10 h-10 rounded-xl border-2 border-foreground shadow-cartoon-sm object-cover"
+            />
             <span className="font-fredoka text-xl font-bold hidden sm:block">
               dhaharan.id
             </span>
@@ -52,17 +54,17 @@ export function Navbar() {
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center gap-2">
             <Link to="/login">
-              <Button variant="outline" size="sm">
+              <Button variant="accent" size="sm">
                 <User className="w-4 h-4" />
-                Masuk
+                Admin
               </Button>
             </Link>
-            <Link to="/admin">
+            {/* <Link to="/dashboard">
               <Button variant="accent" size="sm">
                 <Shield className="w-4 h-4" />
                 Admin
               </Button>
-            </Link>
+            </Link> */}
           </div>
 
           {/* Mobile Menu Button */}
@@ -108,17 +110,17 @@ export function Navbar() {
               })}
               <div className="border-t-2 border-foreground/20 pt-4 mt-2 flex flex-col gap-2">
                 <Link to="/login" onClick={() => setIsOpen(false)}>
-                  <Button variant="outline" className="w-full justify-start gap-2">
-                    <User className="w-4 h-4" />
-                    Masuk
-                  </Button>
-                </Link>
-                <Link to="/admin" onClick={() => setIsOpen(false)}>
                   <Button variant="accent" className="w-full justify-start gap-2">
                     <Shield className="w-4 h-4" />
                     Admin
                   </Button>
                 </Link>
+                {/* <Link to="/admin" onClick={() => setIsOpen(false)}>
+                  <Button variant="accent" className="w-full justify-start gap-2">
+                    <Shield className="w-4 h-4" />
+                    Admin
+                  </Button>
+                </Link> */}
               </div>
             </div>
           </motion.div>
