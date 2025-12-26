@@ -7,13 +7,13 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <div className="min-h-screen flex">
-      {/* Sidebar tetap ada */}
+    <div className="min-h-screen flex bg-background">
+      {/* Sidebar */}
       <Sidebar />
 
-      {/* Main content ada margin kiri agar tidak ketutupan */}
-      <main className="flex-1 ml-[70px] md:ml-[90px] lg:ml-[120px] p-6">
-        <div className="max-w-full">{children}</div>
+      {/* Main content - Responsive margins */}
+      <main className="flex-1 w-full p-3 sm:p-4 md:p-6 lg:p-8 pt-20 sm:pt-6">
+        <div className="max-w-7xl mx-auto">{children}</div>
       </main>
     </div>
   );

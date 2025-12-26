@@ -1,4 +1,4 @@
-// Cashflow.tsx - FULL SCRIPT FINAL
+// Cashflow.tsx - FULLY RESPONSIVE VERSION
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
@@ -33,7 +33,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-
 // ---------------- MOCK DATA ----------------
 const cashflowData = {
   balance: 15750000,
@@ -49,12 +48,54 @@ const cashflowData = {
   ],
 
   transactions: [
-    { id: 1, type: "income", description: "Donasi Anggota Bulan Maret", amount: 5000000, date: "15 Maret 2024", category: "Donasi" },
-    { id: 2, type: "expense", description: "Pembelian Sembako Baksos", amount: 2500000, date: "12 Maret 2024", category: "Kegiatan" },
-    { id: 3, type: "income", description: "Sponsor Kegiatan Ramadhan", amount: 7500000, date: "10 Maret 2024", category: "Sponsor" },
-    { id: 4, type: "expense", description: "Santunan Anak Yatim", amount: 3000000, date: "5 Maret 2024", category: "Santunan" },
-    { id: 5, type: "income", description: "Donasi Tambahan", amount: 2000000, date: "1 Maret 2024", category: "Donasi" },
-    { id: 6, type: "expense", description: "Operasional", amount: 900000, date: "27 Feb 2024", category: "Operasional" },
+    {
+      id: 1,
+      type: "income",
+      description: "Donasi Anggota Bulan Maret",
+      amount: 5000000,
+      date: "15 Maret 2024",
+      category: "Donasi",
+    },
+    {
+      id: 2,
+      type: "expense",
+      description: "Pembelian Sembako Baksos",
+      amount: 2500000,
+      date: "12 Maret 2024",
+      category: "Kegiatan",
+    },
+    {
+      id: 3,
+      type: "income",
+      description: "Sponsor Kegiatan Ramadhan",
+      amount: 7500000,
+      date: "10 Maret 2024",
+      category: "Sponsor",
+    },
+    {
+      id: 4,
+      type: "expense",
+      description: "Santunan Anak Yatim",
+      amount: 3000000,
+      date: "5 Maret 2024",
+      category: "Santunan",
+    },
+    {
+      id: 5,
+      type: "income",
+      description: "Donasi Tambahan",
+      amount: 2000000,
+      date: "1 Maret 2024",
+      category: "Donasi",
+    },
+    {
+      id: 6,
+      type: "expense",
+      description: "Operasional",
+      amount: 900000,
+      date: "27 Feb 2024",
+      category: "Operasional",
+    },
   ],
 };
 
@@ -73,7 +114,6 @@ const formatCurrency = (amount: number) => {
   }).format(amount);
 };
 
-
 // ---------------- COMPONENT ----------------
 export default function Cashflow() {
   const [filter, setFilter] = useState<"all" | "income" | "expense">("all");
@@ -90,12 +130,17 @@ export default function Cashflow() {
     sort === "asc" ? a.amount - b.amount : b.amount - a.amount
   );
 
-  const totalPages = Math.max(1, Math.ceil(filteredTransactions.length / itemsPerPage));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredTransactions.length / itemsPerPage)
+  );
   if (currentPage > totalPages) setCurrentPage(totalPages);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedTransactions = filteredTransactions.slice(startIndex, startIndex + itemsPerPage);
-
+  const paginatedTransactions = filteredTransactions.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   // Export PDF
   const exportPDF = () => {
@@ -120,51 +165,131 @@ export default function Cashflow() {
     doc.save("cashflow-transactions.pdf");
   };
 
-
   return (
-    <div className="min-h-screen py-8">
-      <div className="container mx-auto px-4">
-
-        {/* HEADER */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <Badge className="mb-4" variant="accent">
-            <Wallet className="w-4 h-4 mr-1" /> Transparansi Dana
+    <div className="min-h-screen py-4 sm:py-8">
+      <div className="container mx-auto px-3 sm:px-4">
+        {/* HEADER - RESPONSIVE */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-4 sm:mb-8"
+        >
+          <Badge className="mb-2 sm:mb-4 text-xs sm:text-sm" variant="accent">
+            <Wallet className="w-3 h-3 sm:w-4 sm:h-4 mr-1" /> Transparansi Dana
           </Badge>
 
-          <h1 className="font-fredoka text-4xl md:text-5xl font-bold">Cashflow Komunitas</h1>
-          <p className="font-nunito text-muted-foreground max-w-xl mx-auto mt-3">
-            Laporan pemasukan dan pengeluaran yang disusun secara transparan & terbuka.
+          <h1 className="font-fredoka text-2xl sm:text-4xl md:text-5xl font-bold px-2">
+            Cashflow Komunitas
+          </h1>
+          <p className="font-nunito text-xs sm:text-base text-muted-foreground max-w-xl mx-auto mt-1 sm:mt-3 px-4">
+            Laporan pemasukan dan pengeluaran yang disusun secara transparan &
+            terbuka.
           </p>
         </motion.div>
 
+        {/* SUMMARY CARDS - FULLY RESPONSIVE */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 mb-4 sm:mb-8">
+          {/* Balance Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <Card className="shadow-cartoon-lg border-2 border-foreground">
+              <CardContent className="p-3 sm:p-6">
+                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-primary/20 flex items-center justify-center">
+                      <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                    </div>
+                    <h3 className="font-fredoka font-semibold text-xs sm:text-sm">
+                      Saldo
+                    </h3>
+                  </div>
+                </div>
+                <p className="font-fredoka text-xl sm:text-3xl font-bold text-primary">
+                  {formatCurrency(cashflowData.balance).replace(/\s/g, "")}
+                </p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+                  Total dana tersedia
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
 
-        {/* MAIN GRID */}
-        <div className="grid lg:grid-cols-3 gap-8 items-start">
+          {/* Income Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Card className="shadow-cartoon-lg border-2 border-foreground">
+              <CardContent className="p-3 sm:p-6">
+                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-accent/20 flex items-center justify-center">
+                      <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
+                    </div>
+                    <h3 className="font-fredoka font-semibold text-xs sm:text-sm">
+                      Pemasukan
+                    </h3>
+                  </div>
+                </div>
+                <p className="font-fredoka text-xl sm:text-3xl font-bold text-accent">
+                  {formatCurrency(cashflowData.totalIncome).replace(/\s/g, "")}
+                </p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+                  Total dana masuk
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
 
+          {/* Expense Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Card className="shadow-cartoon-lg border-2 border-foreground">
+              <CardContent className="p-3 sm:p-6">
+                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-highlight/20 flex items-center justify-center">
+                      <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 text-highlight" />
+                    </div>
+                    <h3 className="font-fredoka font-semibold text-xs sm:text-sm">
+                      Pengeluaran
+                    </h3>
+                  </div>
+                </div>
+                <p className="font-fredoka text-xl sm:text-3xl font-bold text-highlight">
+                  {formatCurrency(cashflowData.totalExpense).replace(/\s/g, "")}
+                </p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+                  Total dana keluar
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
 
-          {/* LEFT — TRANSACTIONS */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="lg:col-span-2 flex flex-col h-full">
+        {/* MAIN GRID - RESPONSIVE */}
+        <div className="grid lg:grid-cols-3 gap-4 sm:gap-8 items-start">
+          {/* LEFT – TRANSACTIONS */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="lg:col-span-2 flex flex-col h-full"
+          >
             <Card className="flex flex-col h-full shadow-lg">
-
-              <CardHeader>
-                <div className="flex flex-col gap-4">
-
-                  {/* Sort + Search + PDF + Balance */}
-                  <div className="flex items-center gap-3">
-
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setSort(sort === "asc" ? "desc" : "asc")}
-                      className="flex items-center gap-2"
-                    >
-                      <Filter className="w-4 h-4" />
-                      Sort: {sort === "asc" ? "Termurah" : "Termahal"}
-                    </Button>
-
+              <CardHeader className="p-3 sm:p-6">
+                <div className="flex flex-col gap-3 sm:gap-4">
+                  {/* Search Bar - Mobile First */}
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
                     <Input
                       placeholder="Cari transaksi..."
-                      className="flex-1"
+                      className="flex-1 h-9 sm:h-10 text-sm"
                       value={search}
                       onChange={(e) => {
                         setSearch(e.target.value);
@@ -172,52 +297,96 @@ export default function Cashflow() {
                       }}
                     />
 
-                    <div className="flex flex-col items-end">
-                      <Button size="sm" variant="default" onClick={exportPDF}>
-                        <Download className="w-4 h-4 mr-1" /> PDF
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setSort(sort === "asc" ? "desc" : "asc")}
+                        className="flex-1 sm:flex-none h-9 text-xs sm:text-sm"
+                      >
+                        <Filter className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                        {sort === "asc" ? "Terendah" : "Tertinggi"}
                       </Button>
 
-
+                      <Button
+                        size="sm"
+                        variant="accent"
+                        onClick={exportPDF}
+                        className="flex-1 sm:flex-none h-9 text-xs sm:text-sm"
+                      >
+                        <Download className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                        PDF
+                      </Button>
                     </div>
                   </div>
 
-                 <div className="flex items-center justify-between">
+                  {/* Filter Buttons - Mobile Optimized */}
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                    <div className="flex gap-1.5 sm:gap-2">
+                      <Button
+                        size="sm"
+                        variant={filter === "all" ? "default" : "outline"}
+                        onClick={() => {
+                          setFilter("all");
+                          setCurrentPage(1);
+                        }}
+                        className="flex-1 sm:flex-none h-8 text-xs"
+                      >
+                        Semua
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={filter === "income" ? "accent" : "outline"}
+                        onClick={() => {
+                          setFilter("income");
+                          setCurrentPage(1);
+                        }}
+                        className="flex-1 sm:flex-none h-8 text-xs"
+                      >
+                        Pemasukan
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={filter === "expense" ? "highlight" : "outline"}
+                        onClick={() => {
+                          setFilter("expense");
+                          setCurrentPage(1);
+                        }}
+                        className="flex-1 sm:flex-none h-8 text-xs"
+                      >
+                        Pengeluaran
+                      </Button>
+                    </div>
 
-                {/* Left: Filter buttons */}
-                <div className="flex gap-2">
-                  <Button size="sm" variant={filter === "all" ? "default" : "outline"} onClick={() => { setFilter("all"); setCurrentPage(1); }}>
-                    Semua
-                  </Button>
-
-                  <Button size="sm" variant={filter === "income" ? "default" : "outline"} onClick={() => { setFilter("income"); setCurrentPage(1); }}>
-                    <ArrowUpRight className="w-4 h-4 mr-1" /> Masuk
-                  </Button>
-
-                  <Button size="sm" variant={filter === "expense" ? "default" : "outline"} onClick={() => { setFilter("expense"); setCurrentPage(1); }}>
-                    <ArrowDownRight className="w-4 h-4 mr-1" /> Keluar
-                  </Button>
-                </div>
-
-                {/* Right: Saldo */}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="bg-green-600 text-white hover:bg-green-700 hover:text-white px-3 py-1"
-                >
-                  Saldo: {formatCurrency(cashflowData.balance)}
-                </Button>
-
-              </div>
-
+                    <div className="flex items-center justify-center sm:justify-end gap-2">
+                      <Badge variant="outline" className="text-xs px-2 py-1">
+                        Total: {filteredTransactions.length}
+                      </Badge>
+                      <Badge variant="accent" className="text-xs px-2 py-1">
+                        +
+                        {formatCurrency(
+                          filteredTransactions
+                            .filter((t) => t.type === "income")
+                            .reduce((sum, t) => sum + t.amount, 0)
+                        ).replace(/\s/g, "")}
+                      </Badge>
+                      <Badge variant="highlight" className="text-xs px-2 py-1">
+                        -
+                        {formatCurrency(
+                          filteredTransactions
+                            .filter((t) => t.type === "expense")
+                            .reduce((sum, t) => sum + t.amount, 0)
+                        ).replace(/\s/g, "")}
+                      </Badge>
+                    </div>
+                  </div>
                 </div>
               </CardHeader>
 
-
-              <CardContent className="flex flex-col h-full">
-                <div className="space-y-4 flex-1 overflow-auto pr-1">
-
+              <CardContent className="flex flex-col h-full p-3 sm:p-6">
+                <div className="space-y-2.5 sm:space-y-4 flex-1 overflow-auto pr-1">
                   {paginatedTransactions.length === 0 && (
-                    <p className="text-center text-muted-foreground">
+                    <p className="text-center text-sm text-muted-foreground py-8">
                       Tidak ada transaksi ditemukan.
                     </p>
                   )}
@@ -228,90 +397,128 @@ export default function Cashflow() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      className="flex items-center justify-between p-4 rounded-xl bg-secondary/50 border-2 border-foreground/10"
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-4 rounded-xl bg-secondary/50 border-2 border-foreground/10"
                     >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 border-foreground shadow-cartoon-sm ${
-                          transaction.type === "income" ? "bg-accent" : "bg-highlight"
-                        }`}>
-                          {transaction.type === "income"
-                            ? <ArrowUpRight className="w-6 h-6" />
-                            : <ArrowDownRight className="w-6 h-6" />
-                          }
+                      <div className="flex items-start sm:items-center gap-3">
+                        <div
+                          className={`w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl flex items-center justify-center border-2 border-foreground shadow-cartoon-sm ${
+                            transaction.type === "income"
+                              ? "bg-accent"
+                              : "bg-highlight"
+                          }`}
+                        >
+                          {transaction.type === "income" ? (
+                            <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                          ) : (
+                            <ArrowDownRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                          )}
                         </div>
 
-                        <div>
-                          <p className="font-fredoka font-semibold">{transaction.description}</p>
-                          <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Calendar className="w-3 h-3" /> {transaction.date}
-                            <Badge variant="outline" className="text-xs ml-2">{transaction.category}</Badge>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-fredoka font-semibold text-sm sm:text-base truncate">
+                            {transaction.description}
                           </p>
+                          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-muted-foreground mt-1">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              <span>{transaction.date}</span>
+                            </div>
+                            <Badge
+                              variant="outline"
+                              className="text-[10px] sm:text-xs px-1.5 py-0"
+                            >
+                              {transaction.category}
+                            </Badge>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="text-right">
-                        <div className={`font-fredoka font-bold text-lg ${
-                          transaction.type === "income" ? "text-accent" : "text-highlight"
-                        }`}>
+                      <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-2 sm:gap-1">
+                        <div
+                          className={`font-fredoka font-bold text-base sm:text-lg ${
+                            transaction.type === "income"
+                              ? "text-accent"
+                              : "text-highlight"
+                          }`}
+                        >
                           {transaction.type === "income" ? "+" : "-"}
-                          {formatCurrency(transaction.amount)}
+                          {formatCurrency(transaction.amount).replace(
+                            /\s/g,
+                            ""
+                          )}
                         </div>
-                        <div className="text-xs text-muted-foreground mt-1">
-                          {transaction.type === "income" ? "Pemasukan" : "Pengeluaran"}
+                        <div className="text-[10px] sm:text-xs text-muted-foreground">
+                          {transaction.type === "income"
+                            ? "Pemasukan"
+                            : "Pengeluaran"}
                         </div>
                       </div>
                     </motion.div>
                   ))}
-
                 </div>
 
-                {/* Pagination */}
+                {/* Pagination - Responsive */}
                 {filteredTransactions.length > itemsPerPage && (
-                  <div className="flex justify-center items-center gap-4 mt-4">
-                    <Button size="sm" variant="outline" disabled={currentPage === 1}
-                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}>
+                  <div className="flex justify-center items-center gap-3 sm:gap-4 mt-4 pt-4 border-t">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={currentPage === 1}
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      className="h-8 sm:h-9 text-xs sm:text-sm"
+                    >
                       Prev
                     </Button>
 
-                    <div className="text-sm font-medium">
-                      Halaman {currentPage} / {totalPages}
+                    <div className="text-xs sm:text-sm font-medium">
+                      Hal {currentPage} / {totalPages}
                     </div>
 
-                    <Button size="sm" variant="outline" disabled={currentPage === totalPages}
-                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={currentPage === totalPages}
+                      onClick={() =>
+                        setCurrentPage((p) => Math.min(totalPages, p + 1))
+                      }
+                      className="h-8 sm:h-9 text-xs sm:text-sm"
+                    >
                       Next
                     </Button>
                   </div>
                 )}
-
               </CardContent>
             </Card>
           </motion.div>
 
-
-
-          {/* RIGHT — Charts + Breakdown */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-6">
-
+          {/* RIGHT – Charts + Breakdown - RESPONSIVE */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col gap-4 sm:gap-6"
+          >
             {/* Expense breakdown */}
             <Card className="shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <PieChart className="w-5 h-5" /> Distribusi Pengeluaran
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <PieChart className="w-4 h-4 sm:w-5 sm:h-5" /> Distribusi
+                  Pengeluaran
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 sm:space-y-4 p-4 sm:p-6 pt-0">
                 {expenseCategories.map((c) => {
-                  const percentage = Math.round((c.amount / cashflowData.totalExpense) * 100);
+                  const percentage = Math.round(
+                    (c.amount / cashflowData.totalExpense) * 100
+                  );
                   return (
                     <div key={c.name}>
-                      <div className="flex justify-between text-sm">
+                      <div className="flex justify-between text-xs sm:text-sm">
                         <span>{c.name}</span>
                         <span className="font-fredoka">{percentage}%</span>
                       </div>
 
-                      <div className="h-3 bg-secondary rounded-full overflow-hidden border border-foreground/20 mt-2">
+                      <div className="h-2.5 sm:h-3 bg-secondary rounded-full overflow-hidden border border-foreground/20 mt-1.5 sm:mt-2">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${percentage}%` }}
@@ -320,7 +527,7 @@ export default function Cashflow() {
                         />
                       </div>
 
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
                         {formatCurrency(c.amount)}
                       </p>
                     </div>
@@ -329,33 +536,60 @@ export default function Cashflow() {
               </CardContent>
             </Card>
 
-
-            {/* Bar chart */}
+            {/* Bar chart - Responsive */}
             <Card className="shadow-lg">
-              <CardHeader>
-                <CardTitle className="font-fredoka">Grafik Cashflow Per Bulan</CardTitle>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="font-fredoka text-base sm:text-lg">
+                  Grafik Cashflow Per Bulan
+                </CardTitle>
               </CardHeader>
 
-              <CardContent>
-                <div className="w-full h-64">
+              <CardContent className="p-4 sm:p-6 pt-0">
+                <div className="w-full h-48 sm:h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={cashflowData.monthlyData}>
-                      <XAxis dataKey="month" />
-                      <YAxis tickFormatter={(v) => v / 1000000 + " jt"} />
-                      <Tooltip formatter={(v) => formatCurrency(v as number)} />
-                      <Legend />
+                      <XAxis dataKey="month" tick={{ fontSize: 11 }} />
+                      <YAxis
+                        tickFormatter={(v) => (v / 1000000).toFixed(0) + "jt"}
+                        tick={{ fontSize: 11 }}
+                      />
+                      <Tooltip
+                        formatter={(v) => formatCurrency(v as number)}
+                        contentStyle={{ fontSize: "12px" }}
+                      />
+                      <Legend wrapperStyle={{ fontSize: "12px" }} />
 
-                      <Bar dataKey="income" name="Pemasukan" fill="#86a9cf" radius={[6,6,0,0]} />
-                      <Bar dataKey="expense" name="Pengeluaran" fill="#e37749" radius={[6,6,0,0]} />
+                      <Bar
+                        dataKey="income"
+                        name="Pemasukan"
+                        fill="#86a9cf"
+                        radius={[6, 6, 0, 0]}
+                      />
+                      <Bar
+                        dataKey="expense"
+                        name="Pengeluaran"
+                        fill="#e37749"
+                        radius={[6, 6, 0, 0]}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </CardContent>
             </Card>
-
           </motion.div>
         </div>
       </div>
+
+      {/* Custom CSS for hiding scrollbar */}
+      <style>{`
+        .hide-scrollbar {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </div>
   );
 }

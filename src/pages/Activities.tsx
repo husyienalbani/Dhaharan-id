@@ -13,11 +13,16 @@ import { Activity, ModalMode } from "@/types";
 import { toast } from "@/hooks/use-toast";
 
 export default function Activities() {
-  const [activities, setActivities] = useLocalStorage<Activity[]>("activities", initialActivities);
+  const [activities, setActivities] = useLocalStorage<Activity[]>(
+    "activities",
+    initialActivities
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<ModalMode>("create");
-  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
+    null
+  );
 
   const filteredActivities = activities.filter(
     (a) =>
@@ -80,58 +85,62 @@ export default function Activities() {
 
   return (
     <DashboardLayout>
-      {/* Header */}
+      {/* Header - Responsive */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
+        className="mb-6 sm:mb-8"
       >
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div className="flex items-center gap-3">
             <motion.div
               whileHover={{ rotate: [0, -10, 10, 0] }}
               transition={{ duration: 0.5 }}
-              className="w-12 h-12 rounded-xl bg-accent border-2 border-foreground shadow-cartoon flex items-center justify-center"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-accent border-2 border-foreground shadow-cartoon flex items-center justify-center shrink-0"
             >
-              <Calendar className="w-6 h-6 text-accent-foreground" />
+              <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-accent-foreground" />
             </motion.div>
-            <div>
-              <h1 className="font-fredoka text-2xl md:text-3xl font-bold">
+            <div className="min-w-0">
+              <h1 className="font-fredoka text-xl sm:text-2xl md:text-3xl font-bold truncate">
                 Kegiatan Sosial
               </h1>
-              <p className="text-muted-foreground font-nunito text-sm">
+              <p className="text-muted-foreground font-nunito text-xs sm:text-sm">
                 Kelola semua kegiatan organisasi
               </p>
             </div>
           </div>
-          <Button onClick={handleCreate} variant="accent">
-            <Plus className="w-5 h-5" />
-            Tambah Kegiatan
+          <Button
+            onClick={handleCreate}
+            variant="accent"
+            className="w-full sm:w-auto h-10 sm:h-11"
+          >
+            <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="ml-1 sm:ml-2">Tambah Kegiatan</span>
           </Button>
         </div>
       </motion.div>
 
-      {/* Search */}
+      {/* Search - Responsive */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="mb-6"
+        className="mb-4 sm:mb-6"
       >
-        <div className="relative max-w-md">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+        <div className="relative max-w-full sm:max-w-md">
+          <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
           <Input
             placeholder="Cari kegiatan..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-12"
+            className="pl-10 sm:pl-12 h-10 sm:h-11 text-sm sm:text-base"
           />
         </div>
       </motion.div>
 
-      {/* Activities List */}
+      {/* Activities List - Responsive Grid */}
       {filteredActivities.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
           {filteredActivities.map((activity, index) => (
             <ActivityCard
               key={activity.id}
@@ -150,22 +159,26 @@ export default function Activities() {
           transition={{ delay: 0.2 }}
         >
           <Card>
-            <CardContent className="py-16 text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-secondary border-2 border-foreground shadow-cartoon flex items-center justify-center">
-                <Calendar className="w-8 h-8 text-muted-foreground" />
+            <CardContent className="py-12 sm:py-16 text-center px-4">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-2xl bg-secondary border-2 border-foreground shadow-cartoon flex items-center justify-center">
+                <Calendar className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground" />
               </div>
-              <h3 className="font-fredoka text-lg font-semibold mb-2">
+              <h3 className="font-fredoka text-base sm:text-lg font-semibold mb-2">
                 {searchQuery ? "Tidak Ada Hasil" : "Belum Ada Kegiatan"}
               </h3>
-              <p className="text-muted-foreground font-nunito text-sm mb-4">
+              <p className="text-muted-foreground font-nunito text-xs sm:text-sm mb-4">
                 {searchQuery
                   ? "Coba kata kunci lain"
                   : "Tambahkan kegiatan pertama Anda"}
               </p>
               {!searchQuery && (
-                <Button onClick={handleCreate} variant="accent">
-                  <Plus className="w-5 h-5" />
-                  Tambah Kegiatan
+                <Button
+                  onClick={handleCreate}
+                  variant="accent"
+                  className="h-10 sm:h-11"
+                >
+                  <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="ml-1 sm:ml-2">Tambah Kegiatan</span>
                 </Button>
               )}
             </CardContent>

@@ -144,29 +144,29 @@ export default function Peta() {
   }, [selectedLocation]);
 
   return (
-    <div className="min-h-screen py-8">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen py-4 sm:py-8">
+      <div className="container mx-auto px-3 sm:px-4">
         {/* TITLE */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
+          className="text-center mb-6 sm:mb-8"
         >
-          <Badge className="mb-4">
-            <MapPin className="w-4 h-4 mr-1" /> Lokasi Kegiatan
+          <Badge className="mb-3 sm:mb-4 text-xs sm:text-sm">
+            <MapPin className="w-3 h-3 sm:w-4 sm:h-4 mr-1" /> Lokasi Kegiatan
           </Badge>
 
-          <h1 className="font-fredoka text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="font-fredoka text-2xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-4 px-2">
             Peta Kegiatan
           </h1>
 
-          <p className="font-nunito text-muted-foreground max-w-2xl mx-auto">
+          <p className="font-nunito text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto px-4">
             Jelajahi lokasi-lokasi kegiatan yang telah dilaksanakan.
           </p>
         </motion.div>
 
         {/* GRID LAYOUT */}
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
           {/* MAP */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -174,13 +174,14 @@ export default function Peta() {
             className="lg:col-span-2"
           >
             <Card className="overflow-hidden h-full">
-              <CardContent className="p-0 h-full min-h-[700px]">
+              <CardContent className="p-0 h-full min-h-[400px] sm:min-h-[500px] lg:min-h-[700px]">
                 <MapContainer
                   center={[-6.2088, 106.8456]}
                   zoom={10}
                   scrollWheelZoom={true}
-                  className="w-full h-full"
-                  style={{ minHeight: "700px" }}
+                  className="w-full h-full map-container"
+                  style={{ minHeight: "400px" }}
+                  zoomControl={true}
                 >
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -221,13 +222,13 @@ export default function Peta() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
+            className="space-y-4 sm:space-y-6"
           >
             {selectedLocation ? (
               <Card className="h-full">
-                <CardHeader className="pb-4">
+                <CardHeader className="pb-3 sm:pb-4 p-4 sm:p-6">
                   <div className="flex items-start justify-between">
-                    <Badge variant="highlight">
+                    <Badge variant="highlight" className="text-xs">
                       {selectedLocation.category}
                     </Badge>
 
@@ -235,35 +236,37 @@ export default function Peta() {
                       variant="ghost"
                       size="icon"
                       onClick={() => setSelectedLocation(null)}
+                      className="h-8 w-8"
                     >
                       <X className="w-4 h-4" />
                     </Button>
                   </div>
 
-                  <CardTitle className="mt-2">
+                  <CardTitle className="mt-2 text-base sm:text-lg">
                     {selectedLocation.title}
                   </CardTitle>
 
-                  <CardDescription className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4" /> {selectedLocation.date}
+                  <CardDescription className="flex items-center gap-2 text-xs sm:text-sm">
+                    <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />{" "}
+                    {selectedLocation.date}
                   </CardDescription>
                 </CardHeader>
 
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-3 sm:space-y-4 p-4 sm:p-6">
                   {/* DESCRIPTION */}
-                  <p className="text-sm text-muted-foreground font-nunito">
+                  <p className="text-xs sm:text-sm text-muted-foreground font-nunito">
                     {selectedLocation.description}
                   </p>
 
                   {/* LOCATION */}
-                  <div className="flex items-start gap-2 text-sm">
-                    <MapPin className="w-4 h-4 mt-0.5 text-highlight" />
-                    {selectedLocation.location}
+                  <div className="flex items-start gap-2 text-xs sm:text-sm">
+                    <MapPin className="w-4 h-4 mt-0.5 text-highlight shrink-0" />
+                    <span>{selectedLocation.location}</span>
                   </div>
 
                   {/* AUTOPLAY SLIDER */}
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm font-semibold">
+                    <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold">
                       <Camera className="w-4 h-4" /> Dokumentasi
                     </div>
 
@@ -278,23 +281,25 @@ export default function Peta() {
                             <img
                               key={i}
                               src={img}
-                              className="w-full h-full object-contain rounded-xl"
+                              alt={`${selectedLocation.title} - ${i + 1}`}
+                              className="w-full h-48 sm:h-64 object-cover rounded-xl flex-shrink-0"
                             />
                           )
                         )}
                       </motion.div>
 
                       {/* Bullet Indicator */}
-                      <div className="flex justify-center gap-3 mt-3">
-                        {selectedLocation.images.map((_, idx) => (
+                      <div className="flex justify-center gap-2 sm:gap-3 mt-3">
+                        {selectedLocation.images.map((_: any, idx: number) => (
                           <button
                             key={idx}
                             onClick={() => setSlideIndex(idx)}
                             className={`rounded-full transition-all ${
                               slideIndex === idx
-                                ? "w-4 h-4 bg-orange-500"
-                                : "w-3 h-3 bg-gray-300"
+                                ? "w-3 h-3 sm:w-4 sm:h-4 bg-orange-500"
+                                : "w-2 h-2 sm:w-3 sm:h-3 bg-gray-300"
                             }`}
+                            aria-label={`Slide ${idx + 1}`}
                           />
                         ))}
                       </div>
@@ -304,11 +309,11 @@ export default function Peta() {
               </Card>
             ) : (
               <>
-                <h3 className="font-fredoka text-lg font-semibold">
+                <h3 className="font-fredoka text-base sm:text-lg font-semibold px-1">
                   Daftar Lokasi ({activityLocations.length})
                 </h3>
 
-                <div className="space-y-3 max-h-[640px] overflow-y-auto pr-2">
+                <div className="space-y-3 max-h-[500px] sm:max-h-[640px] overflow-y-auto pr-2">
                   {activityLocations.map((loc) => (
                     <motion.div
                       key={loc.id}
@@ -322,25 +327,28 @@ export default function Peta() {
                           setSlideIndex(0);
                         }}
                       >
-                        <CardContent className="p-4">
+                        <CardContent className="p-3 sm:p-4">
                           <div className="flex items-start gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-primary border border-foreground flex items-center justify-center">
-                              <MapPin className="w-5 h-5" />
+                            <div className="w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-xl bg-primary border border-foreground flex items-center justify-center">
+                              <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
                             </div>
 
-                            <div className="flex-1">
-                              <h4 className="font-fredoka font-semibold text-sm">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-fredoka font-semibold text-xs sm:text-sm truncate">
                                 {loc.title}
                               </h4>
-                              <p className="text-xs text-muted-foreground">
+                              <p className="text-[10px] sm:text-xs text-muted-foreground truncate">
                                 {loc.location}
                               </p>
 
-                              <div className="flex items-center gap-2 mt-1">
-                                <Badge variant="outline" className="text-xs">
+                              <div className="flex items-center gap-2 mt-1 flex-wrap">
+                                <Badge
+                                  variant="outline"
+                                  className="text-[10px] sm:text-xs"
+                                >
                                   {loc.category}
                                 </Badge>
-                                <span className="text-xs text-muted-foreground">
+                                <span className="text-[10px] sm:text-xs text-muted-foreground">
                                   {loc.date}
                                 </span>
                               </div>
@@ -356,6 +364,61 @@ export default function Peta() {
           </motion.div>
         </div>
       </div>
+
+      {/* CUSTOM CSS FOR LEAFLET ZOOM CONTROLS */}
+      <style>{`
+        /* Posisikan zoom controls agar tidak overlap dengan sidebar */
+        .leaflet-control-zoom {
+          margin-top: 10px !important;
+          margin-right: 10px !important;
+        }
+
+        /* Di mobile, pindahkan zoom controls ke kanan bawah */
+        @media (max-width: 640px) {
+          .leaflet-control-zoom {
+            margin-top: auto !important;
+            margin-bottom: 20px !important;
+            margin-right: 10px !important;
+          }
+          
+          .leaflet-top.leaflet-left {
+            top: auto !important;
+            bottom: 0 !important;
+            left: auto !important;
+            right: 0 !important;
+          }
+        }
+
+        /* Pastikan zoom controls memiliki z-index yang tepat */
+        .leaflet-control-zoom {
+          z-index: 400 !important;
+        }
+
+        /* Style untuk map container */
+        .map-container {
+          position: relative;
+          z-index: 1;
+        }
+
+        /* Sembunyikan scrollbar di daftar lokasi */
+        .overflow-y-auto {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+        }
+
+        .overflow-y-auto::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .overflow-y-auto::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .overflow-y-auto::-webkit-scrollbar-thumb {
+          background-color: rgba(155, 155, 155, 0.5);
+          border-radius: 20px;
+        }
+      `}</style>
     </div>
   );
 }

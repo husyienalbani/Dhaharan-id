@@ -1,15 +1,15 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
   Calendar,
   Wallet,
   Settings,
-  Heart,
   Menu,
   X,
   LogOut,
-  DollarSign
+  DollarSign,
+  Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -19,9 +19,9 @@ const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
   { icon: Calendar, label: "Kegiatan", path: "/activities" },
   { icon: Wallet, label: "Cashflow", path: "/addcashflow" },
-  { icon: Settings, label: "Pengaturan", path: "/settings" },
-  { icon: Calendar, label: "Volunteer", path: "/volunteersview" },
+  { icon: Users, label: "Volunteer", path: "/volunteersview" },
   { icon: DollarSign, label: "Donasi", path: "/donationsview" },
+  { icon: Settings, label: "Pengaturan", path: "/settings" },
 ];
 
 export default function Sidebar() {
@@ -31,62 +31,74 @@ export default function Sidebar() {
 
   // LOGOUT FUNCTION
   const handleLogout = () => {
-    localStorage.removeItem("user"); // bersihkan data login
-    navigate("/login"); // arahkan ke halaman login
+    localStorage.removeItem("user");
+    navigate("/login");
   };
 
   return (
     <>
-      {/* FLOATING ICON BUTTON */}
+      {/* MOBILE MENU BUTTON - Fixed at top left */}
       <motion.button
         onClick={() => setIsOpen(true)}
         whileTap={{ scale: 0.9 }}
-        className="
-          fixed top-8 left-4 z-[2]          /* 👈 turun 2–3 cm */
-          bg-primary w-12 h-12 rounded-2xl border-2 border-foreground
-          shadow-cartoon flex items-center justify-center
-        "
+        className="fixed top-4 left-4 z-[60] bg-primary w-12 h-12 rounded-xl border-2 border-foreground shadow-cartoon-lg flex items-center justify-center md:hidden"
       >
         <Menu className="w-6 h-6 text-primary-foreground" />
       </motion.button>
 
-      {/* OVERLAY */}
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/40 backdrop-blur-[1px] z-40"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
+      {/* OVERLAY - Mobile only */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[70] md:hidden"
+            onClick={() => setIsOpen(false)}
+          />
+        )}
+      </AnimatePresence>
 
-      {/* SIDEBAR */}
+      {/* SIDEBAR - FULL HEIGHT */}
       <motion.aside
-        initial={{ x: -300 }}
-        animate={{ x: isOpen ? 0 : -300 }}
-        transition={{ type: "spring", stiffness: 260, damping: 25 }}
-        className="
-          fixed top-0 left-0 h-full w-[260px] 
-          bg-card border-r-2 border-foreground 
-          z-50 flex flex-col shadow-cartoon
-        "
+        initial={false}
+        animate={{
+          x: isOpen ? 0 : -300,
+        }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className={cn(
+          // Mobile: fixed, full viewport height
+          "fixed top-0 left-0 h-screen w-[280px] bg-card border-r-2 border-foreground z-[80] flex flex-col",
+          // Desktop: static, auto height, always visible
+          "md:!translate-x-0 md:sticky md:top-0 md:h-screen md:z-10 md:w-[240px] lg:w-[260px]"
+        )}
       >
-        {/* Header + Close */}
-        <div className="p-4 border-b-2 border-foreground flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary border-2 border-foreground shadow-cartoon flex items-center justify-center">
-              <Heart className="w-5 h-5 text-primary-foreground" />
+        {/* Header - No rounded corners */}
+        <div className="p-3 sm:p-4 border-b-2 border-foreground flex justify-between items-center shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <img
+              src="src/assets/logo-dhaharan.png"
+              alt="Logo Dhaharan"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl border-2 border-foreground shadow-cartoon object-cover shrink-0"
+            />
+            <div className="min-w-0">
+              <h1 className="font-fredoka text-base sm:text-lg font-bold truncate">
+                Dhaharan.id
+              </h1>
+              <p className="text-[10px] text-muted-foreground hidden sm:block truncate">
+                Admin Panel
+              </p>
             </div>
-            <h1 className="font-fredoka text-lg font-bold">Dhaharan.id</h1>
           </div>
 
-          <button onClick={() => setIsOpen(false)}>
+          {/* Close button - Mobile only */}
+          <button onClick={() => setIsOpen(false)} className="md:hidden">
             <X className="w-6 h-6" />
           </button>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2">
+        {/* Navigation - Scrollable if needed */}
+        <nav className="flex-1 p-2 sm:p-3 space-y-1 overflow-y-auto">
           {menuItems.map((item, index) => {
             const isActive = location.pathname === item.path;
             const Icon = item.icon;
@@ -101,14 +113,14 @@ export default function Sidebar() {
                 <Link to={item.path} onClick={() => setIsOpen(false)}>
                   <div
                     className={cn(
-                      "flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all font-nunito font-semibold",
+                      "flex items-center gap-2 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-xl border-2 transition-all font-nunito font-semibold text-sm",
                       isActive
-                        ? "bg-primary border-foreground shadow-cartoon"
+                        ? "bg-primary text-primary-foreground border-foreground shadow-cartoon"
                         : "border-transparent hover:bg-secondary hover:border-foreground hover:shadow-cartoon-sm"
                     )}
                   >
-                    <Icon className="w-5 h-5" />
-                    <span>{item.label}</span>
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                    <span className="truncate">{item.label}</span>
                   </div>
                 </Link>
               </motion.div>
@@ -116,18 +128,17 @@ export default function Sidebar() {
           })}
         </nav>
 
-        <div className="mt-10 flex justify-center">
-        <Button
-          variant="destructive"
-          className="flex items-center gap-2 px-6 py-30 text-lg font-semibold"
-          onClick={handleLogout}
-        >
-          <LogOut className="w-5 h-5" />
-          Keluar
-        </Button>
-      </div>
-
-        <div className="p-4 border-t-2 border-foreground"></div>
+        {/* Logout Button - Sticky at bottom */}
+        <div className="p-2 sm:p-3 border-t-2 border-foreground shrink-0">
+          <Button
+            variant="destructive"
+            className="w-full flex items-center justify-center gap-2 text-sm h-10"
+            onClick={handleLogout}
+          >
+            <LogOut className="w-4 h-4" />
+            Keluar
+          </Button>
+        </div>
       </motion.aside>
     </>
   );

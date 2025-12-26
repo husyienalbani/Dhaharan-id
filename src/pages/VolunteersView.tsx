@@ -1,13 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  Users,
-  Check,
-  X,
-  Mail,
-  Phone,
-  Briefcase,
-} from "lucide-react";
+import { Users, Check, X, Mail, Phone, Briefcase } from "lucide-react";
 
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -24,9 +17,9 @@ const statusConfig = {
 };
 
 export default function VolunteersView() {
-  const [filter, setFilter] = useState<
-    "all" | VolunteerRequest["status"]
-  >("all");
+  const [filter, setFilter] = useState<"all" | VolunteerRequest["status"]>(
+    "all"
+  );
 
   /* ================= DUMMY DATA ================= */
   const [volunteers, setVolunteers] = useState<VolunteerRequest[]>([
@@ -43,10 +36,7 @@ export default function VolunteersView() {
   ]);
 
   /* ================= HANDLER ================= */
-  const onUpdateStatus = (
-    id: string,
-    status: VolunteerRequest["status"]
-  ) => {
+  const onUpdateStatus = (id: string, status: VolunteerRequest["status"]) => {
     setVolunteers((prev) =>
       prev.map((v) => (v.id === id ? { ...v, status } : v))
     );
@@ -56,13 +46,10 @@ export default function VolunteersView() {
     .filter((v) => filter === "all" || v.status === filter)
     .sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() -
-        new Date(a.createdAt).getTime()
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
-  const pendingCount = volunteers.filter(
-    (v) => v.status === "pending"
-  ).length;
+  const pendingCount = volunteers.filter((v) => v.status === "pending").length;
 
   const approvedCount = volunteers.filter(
     (v) => v.status === "approved"
@@ -70,35 +57,37 @@ export default function VolunteersView() {
 
   return (
     <DashboardLayout>
-      {/* ================= HEADER ================= */}
+      {/* ================= HEADER - RESPONSIVE ================= */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
+        className="mb-6 sm:mb-8"
       >
-        <h1 className="font-fredoka text-3xl md:text-4xl font-bold mb-2">
+        <h1 className="font-fredoka text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-1 sm:mb-2">
           Pengajuan Volunteer
         </h1>
-        <p className="text-muted-foreground font-nunito">
+        <p className="text-muted-foreground font-nunito text-xs sm:text-sm md:text-base">
           Kelola dan review pengajuan volunteer
         </p>
       </motion.div>
 
-      {/* ================= SUMMARY ================= */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      {/* ================= SUMMARY - RESPONSIVE ================= */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
           <Card className="bg-secondary">
-            <CardContent className="p-5 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-primary border-2 border-foreground shadow-cartoon-sm flex items-center justify-center">
-                <Users className="w-6 h-6 text-primary-foreground" />
+            <CardContent className="p-4 sm:p-5 flex items-center gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl bg-primary border-2 border-foreground shadow-cartoon-sm flex items-center justify-center">
+                <Users className="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground" />
               </div>
-              <div>
-                <p className="text-sm opacity-70">Menunggu Review</p>
-                <p className="font-fredoka text-2xl font-bold">
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm opacity-70 truncate">
+                  Menunggu Review
+                </p>
+                <p className="font-fredoka text-xl sm:text-2xl font-bold">
                   {pendingCount}
                 </p>
               </div>
@@ -112,15 +101,15 @@ export default function VolunteersView() {
           transition={{ delay: 0.2 }}
         >
           <Card className="bg-accent">
-            <CardContent className="p-5 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-card border-2 border-foreground shadow-cartoon-sm flex items-center justify-center">
-                <Users className="w-6 h-6 text-primary-foreground" />
+            <CardContent className="p-4 sm:p-5 flex items-center gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl bg-card border-2 border-foreground shadow-cartoon-sm flex items-center justify-center">
+                <Users className="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground" />
               </div>
-              <div>
-                <p className="text-sm opacity-70 text-accent-foreground">
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm opacity-70 text-accent-foreground truncate">
                   Volunteer Aktif
                 </p>
-                <p className="font-fredoka text-2xl font-bold text-accent-foreground">
+                <p className="font-fredoka text-xl sm:text-2xl font-bold text-accent-foreground">
                   {approvedCount}
                 </p>
               </div>
@@ -129,27 +118,24 @@ export default function VolunteersView() {
         </motion.div>
       </div>
 
-      {/* ================= FILTER ================= */}
-      <div className="flex gap-2 flex-wrap mb-6">
-        {(["all", "pending", "approved", "rejected"] as const).map(
-          (status) => (
-            <Button
-              key={status}
-              size="sm"
-              variant={filter === status ? "secondary" : "outline"}
-              onClick={() => setFilter(status)}
-            >
-              {status === "all"
-                ? "Semua"
-                : statusConfig[status].label}
-            </Button>
-          )
-        )}
+      {/* ================= FILTER - RESPONSIVE ================= */}
+      <div className="flex gap-2 flex-wrap mb-4 sm:mb-6 overflow-x-auto pb-1">
+        {(["all", "pending", "approved", "rejected"] as const).map((status) => (
+          <Button
+            key={status}
+            size="sm"
+            variant={filter === status ? "secondary" : "outline"}
+            onClick={() => setFilter(status)}
+            className="h-9 sm:h-10 text-xs sm:text-sm shrink-0"
+          >
+            {status === "all" ? "Semua" : statusConfig[status].label}
+          </Button>
+        ))}
       </div>
 
-      {/* ================= LIST ================= */}
+      {/* ================= LIST - RESPONSIVE ================= */}
       {filteredVolunteers.length > 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {filteredVolunteers.map((v, index) => (
             <motion.div
               key={v.id}
@@ -157,39 +143,40 @@ export default function VolunteersView() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
             >
-              <Card className="hover:shadow-cartoon transition-all">
-                <CardContent className="p-5 space-y-3">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-fredoka text-lg font-bold">
+              <Card className="hover:shadow-cartoon transition-all h-full">
+                <CardContent className="p-4 sm:p-5 space-y-2 sm:space-y-3">
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-fredoka text-base sm:text-lg font-bold truncate">
                         {v.name}
                       </h3>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">
                         {formatDate(v.createdAt)}
                       </p>
                     </div>
                     <Badge
                       variant={statusConfig[v.status].variant}
+                      className="text-[10px] sm:text-xs shrink-0"
                     >
                       {statusConfig[v.status].label}
                     </Badge>
                   </div>
 
-                  <div className="space-y-2 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4" />
-                      {v.email}
+                  <div className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2 truncate">
+                      <Mail className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" />
+                      <span className="truncate">{v.email}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Phone className="w-4 h-4" />
+                      <Phone className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" />
                       {v.phone}
                     </div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <Briefcase className="w-4 h-4" />
+                      <Briefcase className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" />
                       {v.skills.map((s) => (
                         <span
                           key={s}
-                          className="px-2 py-0.5 text-xs rounded-full bg-secondary border"
+                          className="px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-xs rounded-full bg-secondary border"
                         >
                           {s}
                         </span>
@@ -202,22 +189,18 @@ export default function VolunteersView() {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="flex-1"
-                        onClick={() =>
-                          onUpdateStatus(v.id, "rejected")
-                        }
+                        className="flex-1 h-9 sm:h-10 text-xs sm:text-sm"
+                        onClick={() => onUpdateStatus(v.id, "rejected")}
                       >
-                        <X className="w-4 h-4 mr-1" />
+                        <X className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                         Tolak
                       </Button>
                       <Button
                         size="sm"
-                        className="flex-1 bg-emerald-400 hover:bg-emerald-500"
-                        onClick={() =>
-                          onUpdateStatus(v.id, "approved")
-                        }
+                        className="flex-1 bg-emerald-400 hover:bg-emerald-500 h-9 sm:h-10 text-xs sm:text-sm"
+                        onClick={() => onUpdateStatus(v.id, "approved")}
                       >
-                        <Check className="w-4 h-4 mr-1" />
+                        <Check className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                         Terima
                       </Button>
                     </div>
@@ -228,9 +211,9 @@ export default function VolunteersView() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 text-muted-foreground">
-          <Users className="w-12 h-12 mx-auto mb-3 opacity-50" />
-          Belum ada pengajuan volunteer
+        <div className="text-center py-12 sm:py-16 text-muted-foreground">
+          <Users className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 opacity-50" />
+          <p className="text-sm">Belum ada pengajuan volunteer</p>
         </div>
       )}
     </DashboardLayout>

@@ -3,7 +3,13 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Calendar, Map, Users, Heart, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 // Mock data for recent activities
@@ -34,7 +40,6 @@ const recentActivities = [
   },
 ];
 
-
 const features = [
   {
     icon: Calendar,
@@ -46,7 +51,8 @@ const features = [
   {
     icon: Wallet,
     title: "Cashflow Transparan",
-    description: "Transparansi pengelolaan dana komunitas untuk kepercayaan bersama",
+    description:
+      "Transparansi pengelolaan dana komunitas untuk kepercayaan bersama",
     link: "/cashflow",
     color: "bg-accent",
   },
@@ -79,13 +85,13 @@ const pengurus = [
     jabatan: "Koordinator Lapangan",
     foto: "src/assets/tim-3.jpg",
   },
-    {
+  {
     id: 4,
     nama: "Lorem Ipsum",
     jabatan: "Koordinator Lapangan",
     foto: "src/assets/tim-4.jpg",
   },
-    {
+  {
     id: 5,
     nama: "Lorem Ipsum",
     jabatan: "Koordinator Lapangan",
@@ -105,7 +111,6 @@ export default function Index() {
 
   return (
     <div className="min-h-screen">
-
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
         <div className="absolute top-10 left-10 w-32 h-32 bg-primary/30 rounded-full blur-3xl" />
@@ -114,7 +119,11 @@ export default function Index() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
               <Badge className="mb-6" variant="highlight">
                 🌟 Komunitas Sosial Indonesia
               </Badge>
@@ -129,8 +138,17 @@ export default function Index() {
               Bersama{" "}
               <span className="text-highlight relative inline-block">
                 Dhaharan
-                <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none">
-                  <path d="M2 8C50 4 150 4 198 8" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                <svg
+                  className="absolute -bottom-2 left-0 w-full"
+                  viewBox="0 0 200 12"
+                  fill="none"
+                >
+                  <path
+                    d="M2 8C50 4 150 4 198 8"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                  />
                 </svg>
               </span>
               <br />
@@ -143,7 +161,7 @@ export default function Index() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="font-nunito text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto"
             >
-              Komunitas sosial yang berfokus pada kegiatan dan agenda sosial 
+              Komunitas sosial yang berfokus pada kegiatan dan agenda sosial
               untuk membangun kebersamaan, kepedulian, dan semangat berbagi.
             </motion.p>
 
@@ -154,28 +172,31 @@ export default function Index() {
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
               <Link to="/kegiatan">
-                <Button size="xl">Lihat Kegiatan <ArrowRight className="w-5 h-5" /></Button>
+                <Button size="xl">
+                  Lihat Kegiatan <ArrowRight className="w-5 h-5" />
+                </Button>
               </Link>
               <Link to="/donationsection">
-                <Button size="xl" variant="outline">Gabung Sekarang</Button>
+                <Button size="xl" variant="outline">
+                  Gabung Sekarang
+                </Button>
               </Link>
             </motion.div>
           </div>
         </div>
       </section>
 
-
       {/* Features Section */}
       <section className="py-20 bg-secondary">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <Badge className="mb-4">Fitur Kami</Badge>
+            <Badge className="mb-4">Informasi</Badge>
             <h2 className="font-fredoka text-3xl md:text-4xl font-bold mb-4">
               Jelajahi Komunitas Kami
             </h2>
             <p className="font-nunito text-muted-foreground max-w-2xl mx-auto">
-              Temukan berbagai fitur yang memudahkan Anda untuk mengetahui dan 
-              berpartisipasi dalam kegiatan komunitas Dhaharan.
+              Transparansi informasi untuk semua yang berpartisipasi dalam
+              kegiatan komunitas Dhaharan.
             </p>
           </div>
 
@@ -220,7 +241,9 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
-              <Badge className="mb-4" variant="accent">Kegiatan Terbaru</Badge>
+              <Badge className="mb-4" variant="accent">
+                Kegiatan Terbaru
+              </Badge>
               <h2 className="font-fredoka text-3xl md:text-4xl font-bold">
                 Aktivitas Terakhir Kami
               </h2>
@@ -248,7 +271,10 @@ export default function Index() {
                       alt={activity.title}
                       className="w-full h-full object-cover transition-transform duration-300"
                     />
-                    <Badge className="absolute top-3 left-3" variant="highlight">
+                    <Badge
+                      className="absolute top-3 left-3"
+                      variant="highlight"
+                    >
                       {activity.category}
                     </Badge>
                   </div>
@@ -270,70 +296,73 @@ export default function Index() {
         </div>
       </section>
 
- {/* ⭐ STRUKTUR PENGURUS */}
-<section className="py-24 bg-primary/30">
-  {/* Aksen Blur Background */}
-  <div className="absolute top-20 left-10 w-48 h-48 bg-primary/20 rounded-full blur-3xl" />
-  <div className="absolute bottom-20 right-10 w-56 h-56 bg-accent/20 rounded-full blur-3xl" />
+      {/* ⭐ STRUKTUR PENGURUS */}
+      <section className="py-24 bg-primary/30">
+        {/* Aksen Blur Background */}
+        <div className="absolute top-20 left-10 w-48 h-48 bg-primary/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-56 h-56 bg-accent/20 rounded-full blur-3xl" />
 
-  <div className="container mx-auto px-4 text-center relative z-10">
-    <Badge className="mb-4" variant="accent">Struktur Pengurus</Badge>
-    <h2 className="font-fredoka text-3xl md:text-4xl font-bold">
-      Pengurus Dhaharan
-    </h2>
-    <p className="font-nunito text-muted-foreground max-w-xl mx-auto mt-3">
-      Orang-orang hebat di balik berjalannya berbagai kegiatan sosial Dhaharan.
-    </p>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <Badge className="mb-4" variant="accent">
+            Struktur Pengurus
+          </Badge>
+          <h2 className="font-fredoka text-3xl md:text-4xl font-bold">
+            Pengurus Dhaharan
+          </h2>
+          <p className="font-nunito text-muted-foreground max-w-xl mx-auto mt-3">
+            Orang-orang hebat di balik berjalannya berbagai kegiatan sosial
+            Dhaharan.
+          </p>
 
-    {/* Wrapper Slider */}
-    <div className="relative w-full max-w-lg mx-auto mt-12 overflow-hidden">
-      {/* Card Slide */}
-      <div
-        className="flex transition-transform duration-700"
-        style={{ transform: `translateX(-${current * 100}%)` }}
-      >
-        {pengurus.map((p) => (
-          <div key={p.id} className="min-w-full flex justify-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="bg-white/60 backdrop-blur-xl shadow-cartoon-lg border-2 border-foreground p-8 rounded-3xl w-[85%] flex flex-col items-center"
+          {/* Wrapper Slider */}
+          <div className="relative w-full max-w-lg mx-auto mt-12 overflow-hidden">
+            {/* Card Slide */}
+            <div
+              className="flex transition-transform duration-700"
+              style={{ transform: `translateX(-${current * 100}%)` }}
             >
-              <motion.img
-                src={p.foto}
-                className="w-44 h-44 rounded-full object-cover border-4 border-white shadow-md"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-              />
+              {pengurus.map((p) => (
+                <div key={p.id} className="min-w-full flex justify-center">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-white/60 backdrop-blur-xl shadow-cartoon-lg border-2 border-foreground p-8 rounded-3xl w-[85%] flex flex-col items-center"
+                  >
+                    <motion.img
+                      src={p.foto}
+                      className="w-44 h-44 rounded-full object-cover border-4 border-white shadow-md"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.5 }}
+                    />
 
-              <h3 className="mt-6 text-2xl font-semibold font-fredoka">
-                {p.nama}
-              </h3>
-              <p className="text-gray-600 font-nunito">{p.jabatan}</p>
-            </motion.div>
+                    <h3 className="mt-6 text-2xl font-semibold font-fredoka">
+                      {p.nama}
+                    </h3>
+                    <p className="text-gray-600 font-nunito">{p.jabatan}</p>
+                  </motion.div>
+                </div>
+              ))}
+            </div>
+
+            {/* Bullet Indicator */}
+            <div className="flex justify-center gap-3 mt-6">
+              {pengurus.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrent(idx)}
+                  className={`transition-all rounded-full ${
+                    current === idx
+                      ? "w-4 h-4 bg-orange-500 shadow-md scale-90"
+                      : "w-3 h-3 bg-gray-300"
+                  }`}
+                />
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
-
-      {/* Bullet Indicator */}
-      <div className="flex justify-center gap-3 mt-6">
-        {pengurus.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrent(idx)}
-            className={`transition-all rounded-full ${
-              current === idx
-                ? "w-4 h-4 bg-orange-500 shadow-md scale-90" 
-                : "w-3 h-3 bg-gray-300"
-            }`}
-          />
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
 
       {/* CTA Section */}
       <section className="py-20">
@@ -349,7 +378,7 @@ export default function Index() {
                 Siap Berbagi Kebaikan?
               </h2>
               <p className="font-nunito text-primary-foreground/80 max-w-2xl mx-auto mb-8">
-                Bergabunglah bersama kami dalam membangun komunitas yang penuh 
+                Bergabunglah bersama kami dalam membangun komunitas yang penuh
                 kepedulian dan semangat berbagi.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -368,7 +397,6 @@ export default function Index() {
           </motion.div>
         </div>
       </section>
-
     </div>
   );
 }
