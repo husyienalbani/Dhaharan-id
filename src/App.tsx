@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Kegiatan from "./pages/Kegiatan";
 import Resep from "./pages/Resep";
 import ResepDetail from "./pages/ResepDetail";
+import ManageResep from "./pages/ManageResep";
 import Cashflow from "./pages/Cashflow";
 import AddCashflow from "./pages/AddCashflow";
 import Activities from "./pages/Activities";
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/peta" element={<Peta />} />
           </Route>
           <Route path="/dashboard" element={<Admin />} />
+          <Route path="/manage-resep" element={<ManageResep />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Login />} />
           <Route path="/AddCashflow" element={<AddCashflow />} />

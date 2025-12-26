@@ -428,14 +428,6 @@ export default function Resep() {
                         }`}
                       />
                     </button>
-
-                    {/* Rating */}
-                    <div className="absolute bottom-3 right-3 px-2 py-1 rounded-lg bg-black/70 backdrop-blur-sm text-white flex items-center gap-1">
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm font-semibold">
-                        {recipe.rating}
-                      </span>
-                    </div>
                   </div>
 
                   {/* Content */}
